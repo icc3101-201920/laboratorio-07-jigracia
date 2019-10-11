@@ -159,8 +159,7 @@ namespace Laboratorio_6_OOP_201902
                 turn += 1;
             }
 
-            Visualization.ShowBoard(BoardGame,activePlayer.Id,activePlayer.GetLifePoints(),activePlayer.GetAttackPoints());
-
+            Visualization.ShowBoard(BoardGame, activePlayer.Id, GetLifePoints(), GetTotalAttackPoints());
 
             
         }
@@ -236,6 +235,21 @@ namespace Laboratorio_6_OOP_201902
                     return -1;
                 }
             }
+        }
+        public int[] GetLifePoints()
+        {
+            int[] totalLife = new int[] {0,0};
+            totalLife[0]=Players[0].LifePoints;
+            totalLife[1] = Players[1].LifePoints;
+            return totalLife;
+        }
+
+        public int[] GetTotalAttackPoints()
+        {
+            int[] totalAttack = new int[2];
+            totalAttack[0]= Players[0].GetAttackPoints()[0] ;
+            totalAttack[1] = Players[1].GetAttackPoints()[0];
+            return totalAttack;
         }
     }
 }

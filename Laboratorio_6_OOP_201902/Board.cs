@@ -7,13 +7,13 @@ using System.Text;
 
 namespace Laboratorio_6_OOP_201902
 {
-    public class Board: IAttackPoints
+    public class Board : IAttackPoints
     {
         //Constantes
         private const int DEFAULT_NUMBER_OF_PLAYERS = 2;
 
         //Atributos
-        private Dictionary<EnumType, List<Card>>[] playerCards; 
+        private Dictionary<EnumType, List<Card>>[] playerCards;
         private List<SpecialCard> weatherCards;
 
         //Propiedades
@@ -21,7 +21,7 @@ namespace Laboratorio_6_OOP_201902
         {
             get
             {
-                return this.playerCards; 
+                return this.playerCards;
             }
         }
         public List<SpecialCard> WeatherCards
@@ -64,7 +64,7 @@ namespace Laboratorio_6_OOP_201902
                 {
                     throw new IndexOutOfRangeException("No player id given");
                 }
-            } 
+            }
             else
             {
                 //Es capitan?
@@ -78,7 +78,7 @@ namespace Laboratorio_6_OOP_201902
                     else
                     {
                         throw new FieldAccessException("Player already has captain");
-                    }   
+                    }
                 }
                 //Es buffer?
                 else if ((playerId == 0 || playerId == 1) && buffType != EnumType.None)
@@ -119,19 +119,47 @@ namespace Laboratorio_6_OOP_201902
 
         public int[] GetAttackPoints(EnumType line = EnumType.None)
         {
-            int[] totalAttack = new int[] { 0, 0};
-            for (int i = 0; i < 2; i++)
+            int[] totalAttack = new int[] {0,0};
+            if (line==EnumType.longRange || line==EnumType.range || line==EnumType.melee)
             {
-                if (playerCards[i].ContainsKey(line))
+
+                for (int i = 0; i < 2; i++)
                 {
-                    foreach (CombatCard card in playerCards[i][line])
+                    if (playerCards[i].ContainsKey(line))
                     {
-                        totalAttack[i] += card.AttackPoints;
+                        foreach (CombatCard card in playerCards[i][line])
+                        {
+                            totalAttack[i]+= card.AttackPoints;
+                        }
                     }
                 }
             }
             return totalAttack;
         }
+
+        public List<string> GetEachAttackPoint(int playerID,EnumType line = EnumType.None)
+        {
+            List<string> eachAttackPoint= new List<string>();
+            if (line == EnumType.longRange || line == EnumType.range || line == EnumType.melee)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    if (playerCards[playerID].ContainsKey(line))
+                    {
+                        foreach (CombatCard card in playerCards[playerID][line])
+                        {
+                            eachAttackPoint.Add("[" + card + "]");
+                        }
+                    }
+
+                }
+            }
+            return eachAttackPoint;
+
+
+        }
+
+       
         
         
     }

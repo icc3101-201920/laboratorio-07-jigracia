@@ -180,13 +180,8 @@ namespace Laboratorio_6_OOP_201902
 
         public int[] GetAttackPoints(EnumType line = EnumType.None)
         {
-            int[] playerAttackPoint = new int[] { AttackPoints };
-            return playerAttackPoint;
-        }
-        public int[] GetLifePoints()
-        {
-            int[] playerLifePoint = new int[] { LifePoints};
-            return playerLifePoint;
+            int[] totalAttack = new int[] {attackPoints};
+            return totalAttack;
         }
     }
 }
