@@ -1,12 +1,13 @@
 ﻿using Laboratorio_6_OOP_201902.Cards;
 using Laboratorio_6_OOP_201902.Enums;
+using Laboratorio_6_OOP_201902.Interface;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Laboratorio_6_OOP_201902
 {
-    public class Board
+    public class Board: IAttackPoints
     {
         //Constantes
         private const int DEFAULT_NUMBER_OF_PLAYERS = 2;
@@ -165,5 +166,20 @@ namespace Laboratorio_6_OOP_201902
             return totalAttack;
         }
 
+        public int[] GetAttackPoints(EnumType line = EnumType.None)
+        {
+            int[] totalAttack = new int[] { 0, 0};
+            for (int i = 0; i < 2; i++)
+            {
+                if (playerCards[i].ContainsKey(line))
+                {
+                    foreach (CombatCard card in playerCards[i][line])
+                    {
+                        totalAttack[i] += card.AttackPoints;
+                    }
+                }
+            }
+            return totalAttack;
+        }
     }
 }
