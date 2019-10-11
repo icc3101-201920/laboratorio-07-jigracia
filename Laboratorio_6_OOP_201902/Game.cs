@@ -159,6 +159,9 @@ namespace Laboratorio_6_OOP_201902
                 turn += 1;
             }
 
+            Visualization.ShowBoard(BoardGame,activePlayer.Id,activePlayer.GetLifePoints(),activePlayer.GetAttackPoints());
+
+
             
         }
         public void AddDecks()
@@ -211,6 +214,27 @@ namespace Laboratorio_6_OOP_201902
                 string line = reader.ReadLine();
                 string[] cardDetails = line.Split(",");
                 captains.Add(new SpecialCard(cardDetails[1], (EnumType)Enum.Parse(typeof(EnumType), cardDetails[2]), cardDetails[3]));
+            }
+        }
+
+        public int GetRoundWinner()
+        {
+            int[] attackPointOfPlayer = new int[2];
+            attackPointOfPlayer = boardGame.GetAttackPoints();
+            if (attackPointOfPlayer[0]> attackPointOfPlayer[1])
+            {
+                return 0;
+            }
+            else
+            {
+                if (attackPointOfPlayer[0]< attackPointOfPlayer[1])
+                {
+                    return 1;
+                }
+                else
+                {
+                    return -1;
+                }
             }
         }
     }

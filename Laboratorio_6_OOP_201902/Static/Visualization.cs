@@ -99,6 +99,52 @@ namespace Laboratorio_6_OOP_201902.Static
             Console.Clear();
         }
 
+        public static void ShowBoard(Board board, int player, int[] lifePoints, int[] attackPoints)
+        {
+            int opponent;
+            string attackCardsLongRange="";
+            string attackCardsRange = "";
+            string attackCardsMelee = "";
+            CombatCard combatCard;
+            if (player==0)
+            {
+                opponent = 1;
+            }
+            else
+            {
+                opponent = 0;
+            }
+            foreach (var item in board.PlayerCards[opponent][EnumType.longRange])
+            {
+                combatCard = item as CombatCard;
+                attackCardsLongRange += "[" + combatCard.AttackPoints + "]";
+            }
+            foreach (var item in board.PlayerCards[opponent][EnumType.range])
+            {
+                combatCard = item as CombatCard;
+                attackCardsRange += "[" + combatCard.AttackPoints + "]";
+            }
+            foreach (var item in board.PlayerCards[opponent][EnumType.melee])
+            {
+                combatCard = item as CombatCard;
+                attackCardsMelee += "[" + combatCard.AttackPoints + "]";
+            }
+            Console.WriteLine("Board:");
+            Console.WriteLine();
+            Console.WriteLine("Opponent - LifePoints:"+lifePoints[opponent]+" - AttackPoints:"+attackPoints[opponent]);
+            Console.WriteLine("(Long Range) ["+board.GetAttackPoints(EnumType.longRange)[opponent]+"]:"+attackCardsLongRange);
+            Console.WriteLine("(Range) [" + board.GetAttackPoints(EnumType.range)[opponent] + "]"+ attackCardsRange);
+            Console.WriteLine("(Melee) [" + board.GetAttackPoints(EnumType.longRange)[opponent] + "]"+attackCardsMelee);
+            Console.WriteLine("Weather Cards:"+board.WeatherCards);
+            Console.WriteLine("You - LifePoints:" + lifePoints[player] + " - AttackPoints:" + attackPoints[player]);
+            Console.WriteLine("(Long Range) [" + board.GetAttackPoints(EnumType.longRange)[player] + "]:" + attackCardsLongRange);
+            Console.WriteLine("(Range) [" + board.GetAttackPoints(EnumType.range)[player] + "]" + attackCardsRange);
+            Console.WriteLine("(Melee) [" + board.GetAttackPoints(EnumType.longRange)[player] + "]" + attackCardsMelee);
+            Console.WriteLine("");
+            Console.WriteLine("");
+            
+        }
+
     }
     
 }
