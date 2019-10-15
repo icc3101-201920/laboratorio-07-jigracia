@@ -119,6 +119,9 @@ namespace Laboratorio_6_OOP_201902
             if (tempCard is CombatCard)
             {
                 board.AddCard(tempCard, this.Id);
+                CombatCard aux = (CombatCard)tempCard;
+                attackPoints += aux.AttackPoints;
+                
             }
             else
             {

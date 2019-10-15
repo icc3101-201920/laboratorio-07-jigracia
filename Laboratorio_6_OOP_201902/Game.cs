@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 
 namespace Laboratorio_6_OOP_201902
 {
@@ -85,11 +86,11 @@ namespace Laboratorio_6_OOP_201902
         {
             if (players[0].LifePoints == 0 || players[1].LifePoints == 0)
             {
-                return true;
+                return false;
             }
             else
             {
-                return false;
+                return true;
             }
         }
         public int GetWinner()
@@ -111,57 +112,129 @@ namespace Laboratorio_6_OOP_201902
         public void Play()
         {
             int userInput = 0;
+            int[] compareArray = new int[2] {0,0};
+            bool turnPassed = true;
+            List<String> passOrPlay = new List<string> { "Play Card", "Pass Turn" };
+            var rand = new Random();
             int firstOrSecondUser = ActivePlayer.Id == 0 ? 0 : 1;
-            
 
-            //turno 0 o configuracion
-            if (turn == 0)
+            while (CheckIfEndGame())
             {
-                for (int _ = 0; _<Players.Length; _++)
+                //turno 0 o configuracion
+                if (turn == 0)
                 {
-                    ActivePlayer = Players[firstOrSecondUser];
-                    Visualization.ClearConsole();
-                    //Mostrar mensaje de inicio
-                    Visualization.ShowProgramMessage($"Player {ActivePlayer.Id+1} select Deck and Captain:");
-                    //Preguntar por deck
-                    Visualization.ShowDecks(this.Decks);
-                    userInput = Visualization.GetUserInput(this.Decks.Count - 1);
-                    Deck deck = new Deck();
-                    deck.Cards = new List<Card>(Decks[userInput].Cards);
-                    ActivePlayer.Deck = deck;
-                    //Preguntar por capitan
-                    Visualization.ShowCaptains(Captains);
-                    userInput = Visualization.GetUserInput(this.Captains.Count - 1);
-                    ActivePlayer.ChooseCaptainCard(new SpecialCard(Captains[userInput].Name, Captains[userInput].Type, Captains[userInput].Effect));
-                    //Asignar mano
-                    ActivePlayer.FirstHand();
-                    //Mostrar mano
-                    Visualization.ShowHand(ActivePlayer.Hand);
-                    //Mostar opciones, cambiar carta o pasar
-                    Visualization.ShowListOptions(new List<string>() { "Change Card", "Pass" }, "Change 3 cards or ready to play:");
-                    userInput = Visualization.GetUserInput(1);
-                    if (userInput == 0)
+                    for (int _ = 0; _ < Players.Length; _++)
                     {
+                        ActivePlayer = Players[firstOrSecondUser];
                         Visualization.ClearConsole();
-                        Visualization.ShowProgramMessage($"Player {ActivePlayer.Id+1} change cards:");
+                        //Mostrar mensaje de inicio
+                        Visualization.ShowProgramMessage($"Player {ActivePlayer.Id + 1} select Deck and Captain:");
+                        //Preguntar por deck
+                        Visualization.ShowDecks(this.Decks);
+                        userInput = Visualization.GetUserInput(this.Decks.Count - 1);
+                        Deck deck = new Deck();
+                        deck.Cards = new List<Card>(Decks[userInput].Cards);
+                        ActivePlayer.Deck = deck;
+                        //Preguntar por capitan
+                        Visualization.ShowCaptains(Captains);
+                        userInput = Visualization.GetUserInput(this.Captains.Count - 1);
+                        ActivePlayer.ChooseCaptainCard(new SpecialCard(Captains[userInput].Name, Captains[userInput].Type, Captains[userInput].Effect));
+                        //Asignar mano
+                        ActivePlayer.FirstHand();
+                        //Mostrar mano
                         Visualization.ShowHand(ActivePlayer.Hand);
-                        for (int i = 0; i < DEFAULT_CHANGE_CARDS_NUMBER; i++)
+                        //Mostar opciones, cambiar carta o pasar
+                        Visualization.ShowListOptions(new List<string>() { "Change Card", "Pass" }, "Change 3 cards or ready to play:");
+                        userInput = Visualization.GetUserInput(1);
+                        if (userInput == 0)
                         {
-                            Visualization.ShowProgramMessage($"Input the numbers of the cards to change (max {DEFAULT_CHANGE_CARDS_NUMBER}). To stop enter -1");
-                            userInput = Visualization.GetUserInput(ActivePlayer.Hand.Cards.Count, true);
-                            if (userInput == -1) break;
-                            ActivePlayer.ChangeCard(userInput);
+                            Visualization.ClearConsole();
+                            Visualization.ShowProgramMessage($"Player {ActivePlayer.Id + 1} change cards:");
                             Visualization.ShowHand(ActivePlayer.Hand);
+                            for (int i = 0; i < DEFAULT_CHANGE_CARDS_NUMBER; i++)
+                            {
+                                Visualization.ShowProgramMessage($"Input the numbers of the cards to change (max {DEFAULT_CHANGE_CARDS_NUMBER}). To stop enter -1");
+                                userInput = Visualization.GetUserInput(ActivePlayer.Hand.Cards.Count, true);
+                                if (userInput == -1) break;
+                                ActivePlayer.ChangeCard(userInput);
+                                Visualization.ShowHand(ActivePlayer.Hand);
+                            }
                         }
+                        firstOrSecondUser = ActivePlayer.Id == 0 ? 1 : 0;
                     }
-                    firstOrSecondUser = ActivePlayer.Id == 0 ? 1 : 0;
+                    turn += 1;
+                    Visualization.ClearConsole();
                 }
-                turn += 1;
+                else
+                {
+                    
+                    for (int _ = 0; _ < Players.Length; _++)
+                    {
+                        while (turnPassed)
+                        {
+                            Visualization.ShowProgramMessage("Turn: " + Convert.ToString(turn));
+                            Visualization.ShowProgramMessage("");
+                            activePlayer.DrawCard(rand.Next(0, activePlayer.Deck.Cards.Count));
+                            Visualization.ShowBoard(BoardGame, activePlayer.Id, GetLifePoints(), GetTotalAttackPoints());
+                            Visualization.ShowHand(activePlayer.Hand);
+                            Visualization.ShowListOptions(passOrPlay, "Make your move player " + Convert.ToString(activePlayer.Id + 1));
+                            userInput = Visualization.GetUserInput(1);
+                            if (userInput == 0)
+                            {
+                                Visualization.ShowProgramMessage("Chose a card by inputing the id. input -1 to cancel ");
+                                userInput = Visualization.GetUserInput(activePlayer.Hand.Cards.Count);
+                                if (userInput != -1)
+                                {
+                                    //boardGame.AddCard(activePlayer.Hand.Cards[userInput],activePlayer.Id);
+                                    activePlayer.PlayCard(userInput);
+                                }
+
+                            }
+                            else
+                            {
+                                Visualization.ShowProgramMessage("Turn passed");
+                                turnPassed = false;
+                            }
+                            Visualization.ClearConsole();
+                        }
+                        if (activePlayer.Id==0)
+                        {
+                            activePlayer = players[1];
+                        }
+                        else
+                        {
+                            activePlayer = players[0];
+                        }
+                        turnPassed = true;
+                    }
+
+                    int idPlayerRoundWinner = GetRoundWinner();
+                    switch (idPlayerRoundWinner)
+                    {
+                        case 0:
+                            Visualization.ShowProgramMessage("Player 1 WINS");
+                            Players[1].LifePoints += -1;
+                            break;
+                        case 1:
+                            Visualization.ShowProgramMessage("Player 2 WINS");
+                            Players[0].LifePoints += -1;
+                            break;
+                        case -1:
+                            Visualization.ShowProgramMessage("TIE");
+                            break;
+                    }
+                    players[0].Board.DestroyCards();
+                    players[1].Board.DestroyCards();
+                    players[0].AttackPoints=0;
+                    players[1].AttackPoints = 0;
+                    turn += 1;
+                    Thread.Sleep(3000);
+                    Visualization.ClearConsole();
+                }
             }
-
-            Visualization.ShowBoard(BoardGame, activePlayer.Id, GetLifePoints(), GetTotalAttackPoints());
-
-            
+            Visualization.ShowProgramMessage("Player "+(GetWinner() + 1) + " is the WINNER");
+            Visualization.ShowProgramMessage("GG");
+            Thread.Sleep(3000);
         }
         public void AddDecks()
         {
@@ -219,7 +292,7 @@ namespace Laboratorio_6_OOP_201902
         public int GetRoundWinner()
         {
             int[] attackPointOfPlayer = new int[2];
-            attackPointOfPlayer = boardGame.GetAttackPoints();
+            attackPointOfPlayer = GetTotalAttackPoints();
             if (attackPointOfPlayer[0]> attackPointOfPlayer[1])
             {
                 return 0;

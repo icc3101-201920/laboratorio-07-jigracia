@@ -105,6 +105,9 @@ namespace Laboratorio_6_OOP_201902.Static
             string attackCardsLongRange = "";
             string attackCardsRange = "";
             string attackCardsMelee = "";
+            string opponentAttackCardsLongRange = "";
+            string opponentAttackCardsRange = "";
+            string opponentAttackCardsMelee = "";
             if (player==0)
             {
                 opponent = 1;
@@ -113,7 +116,62 @@ namespace Laboratorio_6_OOP_201902.Static
             {
                 opponent = 0;
             }
-            
+
+            if (board.PlayerCards[opponent].ContainsKey(EnumType.longRange))
+            {
+                foreach (CombatCard card in board.PlayerCards[opponent][EnumType.longRange])
+                {
+                        
+                    opponentAttackCardsLongRange = attackCardsLongRange + "|" +card.AttackPoints+ "|";
+                } 
+            }
+            if (board.PlayerCards[player].ContainsKey(EnumType.longRange))
+            {
+                foreach (CombatCard card in board.PlayerCards[player][EnumType.longRange])
+                {
+
+                    attackCardsLongRange = attackCardsLongRange + "|" + card.AttackPoints + "|";
+                }
+            }
+
+            if (board.PlayerCards[opponent].ContainsKey(EnumType.range))
+            {
+                foreach (CombatCard card in board.PlayerCards[opponent][EnumType.range])
+                {
+
+                    opponentAttackCardsRange = opponentAttackCardsRange + "|" + card.AttackPoints + "|";
+                }
+                
+            }
+            if (board.PlayerCards[player].ContainsKey(EnumType.range))
+            {
+                foreach (CombatCard card in board.PlayerCards[player][EnumType.range])
+                {
+
+                    attackCardsRange = attackCardsRange + "|" + card.AttackPoints + "|";
+                }
+            }
+
+
+            if (board.PlayerCards[opponent].ContainsKey(EnumType.melee))
+            {
+                foreach (CombatCard card in board.PlayerCards[opponent][EnumType.melee])
+                {
+
+                    opponentAttackCardsMelee = opponentAttackCardsMelee + "|" + card.AttackPoints + "|";
+                }
+                
+            }
+            if (board.PlayerCards[player].ContainsKey(EnumType.melee))
+            {
+                foreach (CombatCard card in board.PlayerCards[player][EnumType.melee])
+                {
+
+                    attackCardsMelee = attackCardsMelee + "|" + card.AttackPoints + "|";
+                }
+            }
+
+
 
 
             string activeWeatherCard;
@@ -123,20 +181,25 @@ namespace Laboratorio_6_OOP_201902.Static
             }
             else
             {
-                activeWeatherCard = board.WeatherCards[board.WeatherCards.Count].Name;
+                activeWeatherCard = board.WeatherCards[board.WeatherCards.Count-1].Name;
+                
             }
 
             Console.WriteLine("Board:");
             Console.WriteLine();
             Console.WriteLine("Opponent - LifePoints:"+lifePoints[opponent]+" - AttackPoints:"+attackPoints[opponent]);
-            Console.WriteLine("(Long Range) ["+board.GetAttackPoints(EnumType.longRange)[opponent]+"]:"+board.GetEachAttackPoint(opponent,EnumType.longRange));
-            Console.WriteLine("(Range) [" + board.GetAttackPoints(EnumType.range)[opponent] + "]:"+ board.GetEachAttackPoint(opponent,EnumType.range));
-            Console.WriteLine("(Melee) [" + board.GetAttackPoints(EnumType.longRange)[opponent] + "]:"+ board.GetEachAttackPoint(opponent,EnumType.melee));
-            Console.WriteLine("Weather Cards:"+ activeWeatherCard);
-            Console.WriteLine("Opponent - LifePoints:" + lifePoints[player] + " - AttackPoints:" + attackPoints[player]);
-            Console.WriteLine("(Long Range) [" + board.GetAttackPoints(EnumType.longRange)[player] + "]:" + board.GetEachAttackPoint(player, EnumType.longRange));
-            Console.WriteLine("(Range) [" + board.GetAttackPoints(EnumType.range)[player] + "]:" + board.GetEachAttackPoint(player, EnumType.range));
-            Console.WriteLine("(Melee) [" + board.GetAttackPoints(EnumType.longRange)[player] + "]:" + board.GetEachAttackPoint(player, EnumType.melee));
+            Console.WriteLine("(Long Range) ["+board.GetAttackPoints(EnumType.longRange)[opponent]+"]:"+opponentAttackCardsLongRange);
+            Console.WriteLine("(Range) [" + board.GetAttackPoints(EnumType.range)[opponent] + "]:"+ opponentAttackCardsRange);
+            Console.WriteLine("(Melee) [" + board.GetAttackPoints(EnumType.longRange)[opponent] + "]:"+ opponentAttackCardsMelee);
+            Console.WriteLine("");
+            Console.Write("Weather Cards:");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write(activeWeatherCard+"\n");
+            Console.ResetColor();
+            Console.WriteLine("You - LifePoints:" + lifePoints[player] + " - AttackPoints:" + attackPoints[player]);
+            Console.WriteLine("(Long Range) [" + board.GetAttackPoints(EnumType.longRange)[player] + "]:" + attackCardsLongRange);
+            Console.WriteLine("(Range) [" + board.GetAttackPoints(EnumType.range)[player] + "]:" + attackCardsRange);
+            Console.WriteLine("(Melee) [" + board.GetAttackPoints(EnumType.longRange)[player] + "]:" + attackCardsMelee);
             Console.WriteLine("");
             Console.WriteLine("");
             

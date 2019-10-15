@@ -137,27 +137,7 @@ namespace Laboratorio_6_OOP_201902
             return totalAttack;
         }
 
-        public List<string> GetEachAttackPoint(int playerID,EnumType line = EnumType.None)
-        {
-            List<string> eachAttackPoint= new List<string>();
-            if (line == EnumType.longRange || line == EnumType.range || line == EnumType.melee)
-            {
-                for (int i = 0; i < 2; i++)
-                {
-                    if (playerCards[playerID].ContainsKey(line))
-                    {
-                        foreach (CombatCard card in playerCards[playerID][line])
-                        {
-                            eachAttackPoint.Add("[" + card + "]");
-                        }
-                    }
-
-                }
-            }
-            return eachAttackPoint;
-
-
-        }
+        
 
        
         
