@@ -181,7 +181,7 @@ namespace Laboratorio_6_OOP_201902.Static
             }
             else
             {
-                activeWeatherCard = board.WeatherCards[board.WeatherCards.Count-1].Name;
+                activeWeatherCard = "|"+board.WeatherCards[board.WeatherCards.Count-1].Name+ "|";
                 
             }
 
@@ -196,6 +196,7 @@ namespace Laboratorio_6_OOP_201902.Static
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.Write(activeWeatherCard+"\n");
             Console.ResetColor();
+            Console.WriteLine("");
             Console.WriteLine("You - LifePoints:" + lifePoints[player] + " - AttackPoints:" + attackPoints[player]);
             Console.WriteLine("(Long Range) [" + board.GetAttackPoints(EnumType.longRange)[player] + "]:" + attackCardsLongRange);
             Console.WriteLine("(Range) [" + board.GetAttackPoints(EnumType.range)[player] + "]:" + attackCardsRange);

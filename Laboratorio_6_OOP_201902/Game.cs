@@ -112,9 +112,11 @@ namespace Laboratorio_6_OOP_201902
         public void Play()
         {
             int userInput = 0;
+            int rowUserInput;
             int[] compareArray = new int[2] {0,0};
             bool turnPassed = true;
             List<String> passOrPlay = new List<string> { "Play Card", "Pass Turn" };
+            List<String> lineBuff = new List<string> {"Melee Row", "Range Row", "Long Range Row" };
             var rand = new Random();
             int firstOrSecondUser = ActivePlayer.Id == 0 ? 0 : 1;
 
@@ -179,14 +181,34 @@ namespace Laboratorio_6_OOP_201902
                             Visualization.ShowHand(activePlayer.Hand);
                             Visualization.ShowListOptions(passOrPlay, "Make your move player " + Convert.ToString(activePlayer.Id + 1));
                             userInput = Visualization.GetUserInput(1);
-                            if (userInput == 0)
+                            if (userInput == 0 && activePlayer.Hand.Cards.Count!=0)
                             {
-                                Visualization.ShowProgramMessage("Chose a card by inputing the id. input -1 to cancel ");
+                                Visualization.ShowProgramMessage("Choose a card by inputing the id. input -1 to cancel ");
                                 userInput = Visualization.GetUserInput(activePlayer.Hand.Cards.Count);
                                 if (userInput != -1)
                                 {
-                                    //boardGame.AddCard(activePlayer.Hand.Cards[userInput],activePlayer.Id);
-                                    activePlayer.PlayCard(userInput);
+                                    if (activePlayer.Hand.Cards[userInput].Type==EnumType.buff)
+                                    {
+                                        Visualization.ShowListOptions(lineBuff, "Choose a row to buff:");
+                                        rowUserInput = Visualization.GetUserInput(2);
+                                        switch (rowUserInput)
+                                        {
+                                            case 0:
+                                                activePlayer.PlayCard(userInput,EnumType.buffmelee);
+                                                break;
+                                            case 1:
+                                                activePlayer.PlayCard(userInput, EnumType.buffrange);
+                                                break;
+                                            case 2:
+                                                activePlayer.PlayCard(userInput, EnumType.bufflongRange);
+                                                break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        activePlayer.PlayCard(userInput);
+                                    }
+                                    
                                 }
 
                             }
@@ -221,12 +243,14 @@ namespace Laboratorio_6_OOP_201902
                             break;
                         case -1:
                             Visualization.ShowProgramMessage("TIE");
+                            Players[0].LifePoints += -1;
+                            Players[1].LifePoints += -1;
                             break;
                     }
                     players[0].Board.DestroyCards();
                     players[1].Board.DestroyCards();
                     players[0].AttackPoints=0;
-                    players[1].AttackPoints = 0;
+                    players[1 ].AttackPoints = 0;
                     turn += 1;
                     Thread.Sleep(3000);
                     Visualization.ClearConsole();
